@@ -10,7 +10,7 @@
 
         <p>Title: <input type="text" name="title"></p>
         <p>Content: <input type="text" name="content"></p>
-        <p>UserId: <input type="text" name="'user_id'"></p>
+        <p>UserId: <input type="text" name="user_id"></p>
         
         
         <input type="submit" value="Submit">

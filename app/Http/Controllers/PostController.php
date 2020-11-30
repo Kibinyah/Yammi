@@ -37,14 +37,22 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request['title']);
+        //dd($request['user_id']);
         $validateData = $request->validate([
-            'title' => 'required|max:255',
-            'content' => 'required|max:255',
-            'user_id' => 'required|integer',
+            'title' => 'required|max:255|string',
+            'content' => 'required|max:255|string',
+            'user_id' => 'required|integer'
         ]);
 
-        return "Validation passed";
+        $p = new Post;
+        $p->title = $validateData['title'];
+        $p->content = $validateData['content'];
+        $p->user_id = $validateData['user_id'];
+        $p->save();
+
+        session()->flash('message','Post is created.');
+        return redirect()->route('posts.index');
+
     }
 
     /**
@@ -91,5 +99,6 @@ class PostController extends Controller
     public function destroy($id)
     {
         //
+        
     }
 }
