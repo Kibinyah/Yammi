@@ -3,9 +3,23 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Model
+class User extends Authenticatable
 {
+    protected $fillable = [
+        "username",
+        "email",
+        "password",
+    ];
+    protected $hidden = [
+        "password",
+        "remember_token",
+    ];
+
+    protected $casts = [
+        "email_verified_at" => "datetime",
+    ];
     //
     public function posts()
     {
@@ -15,8 +29,8 @@ class User extends Model
     {
         return $this->hasMany('App\Comment');
     }
-    public function login()
+    public function profile()
     {
-        return $this->hasOne('App\Login');
+        return $this->hasOne('App\Profile');
     }
 }
