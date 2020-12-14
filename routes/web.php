@@ -32,4 +32,15 @@ Route::get('posts/{post}','PostController@show')-> name('posts.show');
 
 Route::delete('posts/{post}','PostController@destroy')->name('posts.destroy');
 
-// action="{{ route('posts.destroy', ['id' => $post->id] ) }}"
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

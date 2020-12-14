@@ -7,9 +7,10 @@
     <ul>
         <li>Title: {{$post->title}}</li>
         <li>Content: {{$post->content}}</li>
+        <li>User: {{$post->user_id}}</li>
     </ul>
 
-    <form method="POST"  action="{{ route('posts.destroy', ['id' => $post->id] ) }}">
+    <form method="POST"  action="{{ route('posts.destroy', ['post' => $post->id] ) }}">
        
         @csrf
         @method('DELETE')
