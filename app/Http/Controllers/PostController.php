@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use Illuminate\Http\Request;
+use Auth;
 
 class PostController extends Controller
 {
@@ -14,6 +15,7 @@ class PostController extends Controller
      */
     public function index()
     {
+        #$posts = Auth::Post()->get();
         $posts = Post::all();
         return view('posts.index',['posts' => $posts]);
     }
@@ -41,13 +43,12 @@ class PostController extends Controller
         $validateData = $request->validate([
             'title' => 'required|max:255|string',
             'content' => 'required|max:255|string',
-            'user_id' => 'required|integer'
         ]);
 
         $p = new Post;
         $p->title = $validateData['title'];
         $p->content = $validateData['content'];
-        $p->user_id = $validateData['user_id'];
+        $p->user_id = Auth::id();
         $p->save();
 
         session()->flash('message','Post is created.');
