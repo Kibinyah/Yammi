@@ -13,6 +13,11 @@
                             {{ session('status') }}
                         </div>
                     @endif
+                    @if(session('response'))
+                        <div class="alert alert-success">
+                            {{session('response')}}
+                        </div>
+                    @endif
 
                     {{ __('You are logged in!') }}
                 </div>

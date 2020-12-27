@@ -10,7 +10,7 @@ use Faker\Generator as Faker;
 
 $factory->define(Comment::class, function (Faker $faker) {
     return [
-        'content' => $faker->realText($faker->numberBetween(10,20)),
+        'comment' => $faker->realText($faker->numberBetween(10,20)),
 
         'post_id' => Post::inRandomOrder()->first()->id,
         

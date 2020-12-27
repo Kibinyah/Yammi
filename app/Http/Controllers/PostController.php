@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use App\Comment;
+
 use Illuminate\Http\Request;
 use Auth;
 
@@ -74,9 +76,10 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
         //
+        return view('posts.edit',['post' => $post]);
     }
 
     /**
@@ -86,9 +89,22 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
         //
+        $request->validate([
+            'title' => 'required|max:255|string',
+            'content' => 'required|max:255|string'
+        ]);
+
+        $post->update($request->only([
+               'title',
+                'content'
+        ]));
+       
+        session()->flash('message','Post is updated.');
+        return redirect()->route('posts.index');
+            #->with(['success' => 'All changes successfully saved']);
     }
 
     /**
@@ -103,5 +119,24 @@ class PostController extends Controller
         $post->delete();
 
         return redirect()->route('posts.index')->with('message','Post was deleted.');
+    }
+
+    /**
+     * 
+     */
+    public function comment(Request $request,  $post)
+    {
+        $validateData = $request->validate([
+            'comment' => 'required|string',
+        ]);
+        $comment = new comment;
+        $comment->user_id = Auth::id();
+        $comment->post_id = $post;
+        $comment->comment = $validateData['comment'];
+        $comment->save();
+
+        return redirect('/post/{$post}')
+            ->with('response','Comment Added Successfully');
+            
     }
 }

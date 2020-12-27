@@ -14,7 +14,7 @@ class CommentTableSeeder extends Seeder
     {
         //Dummy Seed
         $c1 = new Comment;
-        $c1 -> content = "I also agree";
+        $c1 -> comment = "I also agree";
         $c1 -> post_id = 4;
         $c1 -> user_id = 3;
         $c1 -> save();
