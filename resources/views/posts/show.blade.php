@@ -22,7 +22,8 @@
                         <td>
                             <ul>Title: {{$post->title}}</ul>
                             <ul>Content: {{$post->content}}</ul>
-                            <ul>User: {{$post->user_id}}</ul>
+                            <ul>User: {{$post->user->username}}</ul>
+                            <small>Written on {{$post->created_at}}</small>
                         </td>
                     </tbody>
                     <ul>
@@ -45,7 +46,7 @@
                     <div class="col-md-8">
                         @foreach($post->comments as $comment)
                             <div class="comment">
-                                <p><strong>Name:</strong> {{$comment->user_id}}</p>
+                                <p><strong>Name:</strong> {{$comment->user->username}}</p>
                                 <p><strong>Comment:</strong><br/>{{$comment->comment}}</p>
                             </div>
                         @endforeach

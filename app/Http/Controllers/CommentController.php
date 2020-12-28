@@ -49,7 +49,6 @@ class CommentController extends Controller
 
         return back()
             ->with('response','Comment Added Successfully');
-
     }
 
     /**
