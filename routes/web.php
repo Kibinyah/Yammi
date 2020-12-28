@@ -16,19 +16,21 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
+#Users
 Route::get('users','UserController@index')->name('users.index');
-
 Route::get('users/{user}','UserController@show')-> name('users.show');
+Route::get('users/{user}/edit','UserController@edit')->name('users.edit');
+Route::post('users/{user}','UserController@update')->name('users.update');
+#Profiles
+#Route::get('/profile','ProfileController@index')->name('profiles.index');
 
+#Route::post('/profile/update/','ProfileController@update')->name('profiles.update');
 
-#Route::get('/home','PostController@index')->name('posts.index');
-
+#Posts
 Route::get('posts', 'PostController@index')->name('posts.index');
 Route::get('posts/create','PostController@create')->name('posts.create');
 
 Route::post('posts','PostController@store')->name('posts.store');
-
 Route::get('posts/{post}','PostController@show')-> name('posts.show');
 
 Route::get('posts/{post}/edit','PostController@edit')->name('posts.edit');
@@ -36,9 +38,10 @@ Route::post('posts/{post}','PostController@update')->name('posts.update');
 
 Route::delete('posts/{post}','PostController@destroy')->name('posts.destroy');
 
+#Comments
 Route::post('/post/{post}/comment','CommentController@store')->name('comments.store');
 
-Auth::routes();
-
+#Home
 Route::get('/home', 'HomeController@index')->name('home');
+Auth::routes();
 

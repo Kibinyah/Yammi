@@ -18,4 +18,14 @@ class Post extends Model
     {
         return $this->hasMany('App\Comment');
     }
+
+    public function visits()
+    {
+        return $this->hasMany('App\Visit');
+    }
+
+    public function latest_visit()
+    {
+        return $this->hasOne('App\Visit')->latest();
+    }
 }

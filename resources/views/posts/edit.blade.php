@@ -10,7 +10,7 @@
         <div class="col-md-8">
             <div class="card">
                 <h2 class="card-title">Edit Post</h2>
-                <form method="POST" action="{{ route('posts.update', $post) }}">
+                <form method="POST" action="{{ route('posts.update', $post) }}" enctype='multipart/form-data'>
                     @csrf
                     <div class="row">
                         <div class="col-12 col-md-6"> 
@@ -21,6 +21,8 @@
                                 <label for="content">Content:</label>
                                 <input type="text" name="content" class="form-control" value="{{ $post->content}}">
 
+                                <label for="cover_image">Image:</label>
+                                <input id="cover_image" type="file" class="form-control" name="cover_image">
                             </div>
                         </div>
                     </div>

@@ -20,10 +20,9 @@ use Illuminate\Support\Str;
 
 $factory->define(Profile::class, function (Faker $faker) {
     return [
-            'user_id' => User::inRandomOrder()->first()->id,
-            'realName' => $faker->name,
-            'dateOfBirth' => $faker->date(),
+            'user_id' => $faker->unique()->numberBetween(1, App\User::count()),
+            'name' => $faker->name,
+            'dateOfBirth' => $faker->date,
             'bio' => $faker->realText($faker->numberBetween(10,20)),
-            'numberOfPosts' => $faker->numberBetween(10,20),
         ];
 });

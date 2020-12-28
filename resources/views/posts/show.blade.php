@@ -14,16 +14,21 @@
                             {{session('response')}}
                         </div>
                 @endif
-                <div class="card-header">{{ __('Dashboard') }}</div>
+                <div class="card-header">{{ __('Post') }}</div>
 
                 <div class="card-body">
                 <ul>
                     <tbody>
                         <td>
-                            <ul>Title: {{$post->title}}</ul>
-                            <ul>Content: {{$post->content}}</ul>
-                            <ul>User: {{$post->user->username}}</ul>
-                            <small>Written on {{$post->created_at}}</small>
+                            <h3>Title: {{$post->title}}</h3>
+                            <div class="col-md-4 col-sm-4">
+                                <img style="width:100%" src="/storage/cover_images/{{$post->cover_image}}">
+                                <br><br>
+                            </div>
+                            <div class="col-md-8 col-sm-8">
+                                <ul>Content: {{$post->content}}</ul>
+                                <small>Written on {{$post->created_at}} by {{$post->user->username}}</small>
+                            </div>
                         </td>
                     </tbody>
                     <ul>

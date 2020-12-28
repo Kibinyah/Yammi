@@ -15,20 +15,17 @@ class CreateProfilesTable extends Migration
     {
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
-            $table->string('realName');
+            $table->string('name');
             $table->date('dateOfBirth');
             $table->string('bio');
-            $table->integer('numberOfPosts');
             $table->timestamps();
 
             $table->bigInteger('user_id')->unsigned();
             
             $table->foreign('user_id')->references('id')->on('users')
                 ->onDelete('cascade')->onUpdate('cascade');
-
         });
     }
-
     /**
      * Reverse the migrations.
      *
@@ -36,6 +33,6 @@ class CreateProfilesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('logins');
+        Schema::dropIfExists('profiles');
     }
 }

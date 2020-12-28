@@ -5,15 +5,26 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Profile;
 use Illuminate\Http\Request;
-use App\Traits\UploadTrait;
 use Illuminate\Support\Str;
+use App\Traits\UploadTrait;
 
 use Auth;
 
-class UserController extends Controller
+class ProfileController extends Controller
 {
+
     use UploadTrait;
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+      /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -21,8 +32,7 @@ class UserController extends Controller
     public function index()
     {
         //
-        $users = User::all();
-        return view('users.index',['users' => $users]);
+        return view('auth.profile');
     }
 
     /**
@@ -52,10 +62,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show()
     {
-        //$user = User::findOrFail($id);
-        return view('users.show',['user' => $user]);
+       
     }
 
     /**
@@ -67,7 +76,7 @@ class UserController extends Controller
     public function edit(User $user)
     {
         //
-        return view('users.edit',['user' => $user]);
+        return view('profiles.edit',['user' => $user]);
     }
 
     /**
@@ -77,13 +86,23 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $request->validate([
             'name' => 'string',
+            'email' => 'required|string',
+            'dateOfBirth' => 'string',
+            'bio' => 'string',
+            'profile_image' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        $user = User::findOrFail($id);
+        $profile = new Profile();
+        $profile->user_id = Auth::id();
+        $profile->name = $request->input('name');
+        #$user->email = $request->input('email');
+        $profile->dateOfBirth = $request->input('dateOfBirth');
+        $profile->bio = $request->input('bio');
+        
 
         if($request->has('profile_image')){
             $image = $request->file('profile_image');
@@ -91,12 +110,14 @@ class UserController extends Controller
             $folder = '/uploads/images/';
             $filePath = $folder . $name. '.' . $image->getClientOriginalExtension();
             $this->uploadOne($image,$folder,'public',$name);
-            $user->profile_image = $filePath;
+            $profile->profile_image = $filePath;
         }
-        $user->save();
+
+        $profile->save();
 
 
-        return redirect()->route('users.show',$id)->with(['success' => 'Profile successfully updated']);
+
+        return redirect()->back()->with(['success' => 'Profile successfully updated']);
     }
 
     /**
@@ -105,7 +126,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy()
     {
         //
     }

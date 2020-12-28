@@ -1,17 +1,6 @@
 @extends('layouts.app')
 
-@section('title','User Details')
-
 @section('content')
-
-    <ul>
-        <li>Username: {{$user->username}}</li>
-        <li>Real Name: {{$user->name}}</li>
-        <li>Date of Birth: {{$user->dateOfBirth}}</li>
-        <li>bio: {{$user->bio}}</li>
-    </ul>
-
-
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
@@ -40,52 +29,53 @@
                                             </ul>
                                         </div>
                                     @endif
+                                    <form action="{{ route('user.update',$user) }}" method="POST" role="form" enctype="multipart/form-data">
                                         @csrf
                                         <div class="form-group row">
                                             <label for="username" class="col-md-4 col-form-label text-md-right">Username</label>
                                             <div class="col-md-6">
-                                                <label>{{$user->username}}</label>
+                                                <label>{{auth()->user()->username}}</label>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="name" class="col-md-4 col-form-label text-md-right">Name</label>
                                             <div class="col-md-6">
-                                                <label>{{$user->name}}</label>
+                                                <input id="name" type="text" class="form-control" name="name" value="{{ old('name', auth()->user()->profile()->name) }}">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="email" class="col-md-4 col-form-label text-md-right">Email</label>
                                             <div class="col-md-6">
-                                                <label>{{$user->email}}</label>
+                                                <input id="email" type="text" class="form-control" name="email" value="{{ old('email', auth()->user()->email) }}">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="dateOfBirth" class="col-md-4 col-form-label text-md-right">Date Of Birth</label>
                                             <div class="col-md-6">
-                                                <label>{{$user->dateOfBirth}}</label>
+                                                <input id="dateOfBirth" type="text" class="form-control" name="dateOfBirth" value="{{ old('dateOfBirth', auth()->profile()->dateOfBirth) }}" >
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="bio" class="col-md-4 col-form-label text-md-right">Bio</label>
                                             <div class="col-md-6">
-                                                <label>{{$user->dateOfBirth}}</label>
+                                                <input id="bio" type="text" class="form-control" name="bio" value="{{ old('bio', auth()->profile()->bio) }}" >
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="profile_image" class="col-md-4 col-form-label text-md-right">Profile Image</label>
                                             <div class="col-md-6">
-                                            @if (auth()->user()->image)
-                                                <img src="{{ asset(auth()->user()->image) }}">
-                                            @endif   
+                                                <input id="profile_image" type="file" class="form-control" name="profile_image">
+                                                @if (auth()->user()->image)
+                                                    <code>{{ auth()->user()->image }}</code>
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="form-group row mb-0 mt-5">
                                             <div class="col-md-8 offset-md-4">
-
-                                                <button type="submit" class="btn"><a href="/users/{{$user->id}}/edit">Edit Profile</a></button>
+                                                <button type="submit" class="btn btn-primary">Update Profile</button>
                                             </div>
                                         </div>
-
+                                    </form>
                                 </div>
                             </div>
                         </div>
