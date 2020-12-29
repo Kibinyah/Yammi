@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use App\Comment;
+use App\Tag;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Auth;
@@ -36,7 +37,8 @@ class PostController extends Controller
     public function create()
     {
         //$posts = Post::all();
-        return view('posts.create');
+        $tags = Tag::all();
+        return view('posts.create')->withTags($tags);
     }
 
     /**
@@ -47,7 +49,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request['user_id']);
+        #dd($request);
         $validateData = $request->validate([
             'title' => 'required|max:255|string',
             'content' => 'required|max:255|string',
@@ -78,6 +80,8 @@ class PostController extends Controller
         $p->cover_image = $fileNameToStore;
         $p->save();
 
+        $p->tags()->sync($request->tags, false); 
+
         session()->flash('message','Post is created.');
         return redirect()->route('posts.index');
 
@@ -104,7 +108,12 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         //
-        return view('posts.edit',['post' => $post]);
+        $tags = Tag::all();
+        $tags2 = array();
+        foreach($tags as $tag){
+            $tags2[$tag->id] = $tag->name;
+        }
+        return view('posts.edit',['post' => $post])->withTags($tags2);
     }
 
     /**
@@ -146,6 +155,8 @@ class PostController extends Controller
             $post->cover_image = $fileNameToStore;
         }
         $post->save();
+
+        $post->tags()->sync($request->tags); 
 
         session()->flash('message','Post is updated.');
         return redirect()->route('posts.index');

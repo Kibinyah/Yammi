@@ -38,6 +38,13 @@ Route::post('posts/{post}','PostController@update')->name('posts.update');
 
 Route::delete('posts/{post}','PostController@destroy')->name('posts.destroy');
 
+#Tags
+Route::get('tags', 'TagController@index')->name('tags.index');
+Route::post('tags','TagController@store')->name('tags.store');
+Route::get('tags/{tag}','TagController@show')-> name('tags.show');
+Route::get('tags/{tag}/edit','TagController@edit')->name('tags.edit');
+Route::post('tags/{tag}','TagController@update')->name('tags.update');
+Route::delete('tags/{tag}','TagController@destroy')->name('tags.destroy');
 #Comments
 Route::post('/post/{post}/comment','CommentController@store')->name('comments.store');
 

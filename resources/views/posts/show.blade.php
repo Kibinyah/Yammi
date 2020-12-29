@@ -20,15 +20,23 @@
                 <ul>
                     <tbody>
                         <td>
-                            <h3>Title: {{$post->title}}</h3>
+                            <h2>Title: {{$post->title}}</h2>
                             <div class="col-md-4 col-sm-4">
                                 <img style="width:100%" src="/storage/cover_images/{{$post->cover_image}}">
-                                <br><br>
                             </div>
                             <div class="col-md-8 col-sm-8">
-                                <ul>Content: {{$post->content}}</ul>
+                                <h3>Content: </h3>
+                                <ul>{{$post->content}}</ul>
                                 <small>Written on {{$post->created_at}} by {{$post->user->username}}</small>
                             </div>
+                            <hr>
+                                <div class="col-md-4 col-sm-4">
+                                    <h4>Tags: </h4>
+                                    @foreach ($post->tags as $tags)
+                                        <span class="label label-default">{{$tags->name}}</span>
+                                    @endforeach
+                                </div>
+                            </hr>
                         </td>
                     </tbody>
                     <ul>

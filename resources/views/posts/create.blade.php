@@ -21,6 +21,15 @@
                                 <label for="content">Content:</label>
                                 <input type="text" name="content" class="form-control">
 
+                                <label for="tags">Tags:</label>
+                                <select name="tags[]" multiple class="form-control">
+                                    @foreach($tags as $tag)
+                                        <option value='{{$tag->id}}'>
+                                            {{$tag->name}}
+                                        </option>
+                                    @endforeach
+                                </select>
+
                                 <label for="cover_image">Image:</label>
                                 <input id="cover_image" type="file" class="form-control" name="cover_image">
                             </div>
