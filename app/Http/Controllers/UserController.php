@@ -5,14 +5,12 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Profile;
 use Illuminate\Http\Request;
-use App\Traits\UploadTrait;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 use Auth;
 
 class UserController extends Controller
 {
-    use UploadTrait;
     /**
      * Display a listing of the resource.
      *
@@ -55,6 +53,15 @@ class UserController extends Controller
     public function show(User $user)
     {
         //$user = User::findOrFail($id);
+        if(($user->profile) == false){
+            Profile::Create([
+                'name' => NULL,
+                'bio' => NULL,
+                'dateOfBirth' => NULL,
+                'user_id' => $user->id,
+            ]);
+        }
+        
         return view('users.show',['user' => $user]);
     }
 
@@ -80,23 +87,44 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'string',
+            'email' => 'string|required',
+            'name' => 'string|nullable',
+            'dateOfBirth' => 'date|nullable',
+            'bio' => 'string|nullable',
         ]);
+        //Handle file upload
+        if($request->hasFile('profile_image')){
+            //Get filename with extension
+            $filenameWithExt = $request->file('profile_image')->getClientOriginalName();
+            //Get just filename
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            //Get just extension
+            $extension = $request->file('profile_image')->getClientOriginalExtension();
+            //Filename to store
+            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            //Upload Image
+            $path = $request->file('profile_image')->storeAs('public/profile_images',$fileNameToStore);
+        }else{
+            $fileNameToStore = "noimage.png";
+        }
 
         $user = User::findOrFail($id);
-
-        if($request->has('profile_image')){
-            $image = $request->file('profile_image');
-            $name = Str::slug($request->input('name')).'_'.time();
-            $folder = '/uploads/images/';
-            $filePath = $folder . $name. '.' . $image->getClientOriginalExtension();
-            $this->uploadOne($image,$folder,'public',$name);
-            $user->profile_image = $filePath;
-        }
+        $user->email = $request->input('email');
+        $user->profile_image = $fileNameToStore;
         $user->save();
 
+        if(($user->profile) == true){
+            $profile = $user->profile;
+        }else{
+            $profile = new Profile();
+            $profile->user_id = $id;
+        }
+        $profile->name = $request->input('name');
+        $profile->dateOfBirth = $request->input('dateOfBirth');
+        $profile->bio = $request->input('bio');
+        $profile->save();
 
-        return redirect()->route('users.show',$id)->with(['success' => 'Profile successfully updated']);
+        return redirect()->route('users.show',$user)->with(['success' => 'Profile successfully updated']);
     }
 
     /**

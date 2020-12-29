@@ -11,7 +11,7 @@ class User extends Authenticatable
         "username",
         "email",
         "password",
-        'profile_image'
+        "profile_image",
     ];
     protected $hidden = [
         "password",
@@ -33,9 +33,5 @@ class User extends Authenticatable
     public function profile()
     {
         return $this->hasOne('App\Profile');
-    }
-    public function getImageAttribute()
-    {
-        return $this->profile_image;
     }
 }

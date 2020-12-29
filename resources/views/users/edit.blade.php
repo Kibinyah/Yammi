@@ -34,40 +34,39 @@
                                         <div class="form-group row">
                                             <label for="username" class="col-md-4 col-form-label text-md-right">Username</label>
                                             <div class="col-md-6">
-                                                <label>{{auth()->user()->username}}</label>
+                                                <label>{{$user->username}}</label>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="name" class="col-md-4 col-form-label text-md-right">Name</label>
                                             <div class="col-md-6">
-                                                <input id="name" type="text" class="form-control" name="name" value="{{ old('name', auth()->user()->name) }}">
+                                                <input id="name" type="text" class="form-control" name="name" 
+                                                value="{{ old('name', $user->profile->name) }}"
+                                                >
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="email" class="col-md-4 col-form-label text-md-right">Email</label>
                                             <div class="col-md-6">
-                                                <input id="email" type="text" class="form-control" name="email" value="{{ old('email', auth()->user()->email) }}">
+                                                <input id="email" type="text" class="form-control" name="email" value="{{ old('email', $user->email) }}">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="dateOfBirth" class="col-md-4 col-form-label text-md-right">Date Of Birth</label>
                                             <div class="col-md-6">
-                                                <input id="dateOfBirth" type="text" class="form-control" name="dateOfBirth" value="{{ old('dateOfBirth', auth()->user()->dateOfBirth) }}" >
+                                                <input id="dateOfBirth" type="text" class="form-control" name="dateOfBirth" value="{{ old('dateOfBirth', $user->profile->dateOfBirth) }}" >
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="bio" class="col-md-4 col-form-label text-md-right">Bio</label>
                                             <div class="col-md-6">
-                                                <input id="bio" type="text" class="form-control" name="bio" value="{{ old('bio', auth()->user()->bio) }}" >
+                                                <input id="bio" type="text" class="form-control" name="bio" value="{{ old('bio', $user->profile->bio) }}" >
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="profile_image" class="col-md-4 col-form-label text-md-right">Profile Image</label>
                                             <div class="col-md-6">
                                                 <input id="profile_image" type="file" class="form-control" name="profile_image">
-                                                @if (auth()->user()->image)
-                                                    <code>{{ auth()->user()->image }}</code>
-                                                @endif
                                             </div>
                                         </div>
                                         <div class="form-group row mb-0 mt-5">

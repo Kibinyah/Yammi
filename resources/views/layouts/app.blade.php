@@ -49,10 +49,11 @@
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    @if (auth()->user()->image)
-                                        <img src="{{ asset(auth()->user()->image) }}" style="width: 40px; height: 40px; border-radius: 50%;">
+                                    @if (auth()->user()->profile_image)
+                                        <img style="width: 40px; height: 40px; border-radius: 50%;" src="/storage/profile_images/{{auth()->user()->profile_image}}">
+                                    @else 
+                                        {{ auth()->user()->name }} 
                                     @endif
-                                        {{ Auth::user()->name }} 
                                     <span class="caret"></span>
                                 </a>
 

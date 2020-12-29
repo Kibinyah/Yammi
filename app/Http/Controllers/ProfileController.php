@@ -89,14 +89,26 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'name' => 'string',
-            'email' => 'required|string',
-            'dateOfBirth' => 'string',
-            'bio' => 'string',
-            'profile_image' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
+            'name' => 'string|nullable',
+            'dateOfBirth' => 'string|nullable',
+            'bio' => 'string|nullable',
         ]);
 
-        $profile = new Profile();
+         //Handle file upload
+         if($request->hasFile('cover_image')){
+            //Get filename with extension
+            $filenameWithExt = $request->file('cover_image')->getClientOriginalName();
+            //Get just filename
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            //Get just extension
+            $extension = $request->file('cover_image')->getClientOriginalExtension();
+            //Filename to store
+            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            //Upload Image
+            $path = $request->file('cover_image')->storeAs('public/cover_images',$fileNameToStore);
+        }
+
+        $profile = User::find(1)
         $profile->user_id = Auth::id();
         $profile->name = $request->input('name');
         #$user->email = $request->input('email');

@@ -11,5 +11,6 @@ $factory->define(Post::class, function (Faker $faker) {
         'user_id' => User::inRandomOrder()->first()->id,
         'title' => $faker->realText($faker->numberBetween(10,15)),
         'content'=> $faker->realText($faker->numberBetween(10,15)),
+        'cover_image' => "noimage.png"
     ];
 });

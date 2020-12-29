@@ -10,7 +10,7 @@ class Profile extends Model
         "realName",
         "dateOfBirth",
         "bio",
-        'profile_image'
+        'user_id'
     ];
     
     public function user()

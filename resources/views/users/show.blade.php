@@ -4,14 +4,6 @@
 
 @section('content')
 
-    <ul>
-        <li>Username: {{$user->username}}</li>
-        <li>Real Name: {{$user->name}}</li>
-        <li>Date of Birth: {{$user->dateOfBirth}}</li>
-        <li>bio: {{$user->bio}}</li>
-    </ul>
-
-
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
@@ -50,7 +42,13 @@
                                         <div class="form-group row">
                                             <label for="name" class="col-md-4 col-form-label text-md-right">Name</label>
                                             <div class="col-md-6">
-                                                <label>{{$user->name}}</label>
+                                                <label>
+                                                    @if($user->profile)
+                                                        {{ $user->profile->name}}
+                                                    @else
+                                                        {{$user->name}}
+                                                    @endif
+                                                </label>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -62,21 +60,34 @@
                                         <div class="form-group row">
                                             <label for="dateOfBirth" class="col-md-4 col-form-label text-md-right">Date Of Birth</label>
                                             <div class="col-md-6">
-                                                <label>{{$user->dateOfBirth}}</label>
+                                                <label>
+                                                    @if($user->profile)
+                                                        {{ $user->profile->dateOfBirth}}
+                                                    @else
+                                                        {{$user->name}}
+                                                    @endif
+                                                </label>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="bio" class="col-md-4 col-form-label text-md-right">Bio</label>
                                             <div class="col-md-6">
-                                                <label>{{$user->dateOfBirth}}</label>
+                                                <label>
+                                                    @if($user->profile)
+                                                        {{ $user->profile->bio}}
+                                                    @else
+                                                        {{$user->name}}
+                                                    @endif
+                                                </label>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="profile_image" class="col-md-4 col-form-label text-md-right">Profile Image</label>
                                             <div class="col-md-6">
-                                            @if (auth()->user()->image)
-                                                <img src="{{ asset(auth()->user()->image) }}">
-                                            @endif   
+                                                <div class="col-md-4 col-sm-4">
+                                                    <img style="width:50%" src="/storage/profile_images/{{$user->profile_image}}">
+                                                    <br><br>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group row mb-0 mt-5">
