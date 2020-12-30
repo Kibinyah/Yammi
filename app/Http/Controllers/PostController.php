@@ -11,6 +11,9 @@ use Auth;
 
 class PostController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -183,6 +186,7 @@ class PostController extends Controller
             Storage::delete('public/cover_images/'.$post->cover_image);
         }
 
+        $post->tags()->detach();
 
         $post->delete();
 

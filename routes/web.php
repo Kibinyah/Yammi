@@ -16,6 +16,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+
+#middleware('can:manage-users')
+Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function(){
+    Route::resource('/users','UsersController',['except' =>['create','store']]);
+});
 #Users
 Route::get('users','UserController@index')->name('users.index');
 Route::get('users/{user}','UserController@show')-> name('users.show');
@@ -46,9 +53,11 @@ Route::get('tags/{tag}/edit','TagController@edit')->name('tags.edit');
 Route::post('tags/{tag}','TagController@update')->name('tags.update');
 Route::delete('tags/{tag}','TagController@destroy')->name('tags.destroy');
 #Comments
-Route::post('/post/{post}/comment','CommentController@store')->name('comments.store');
+Route::post('comment/{post}','CommentController@store')->name('comments.store');
+Route::get('comment/{comment}/edit','CommentController@edit')->name('comments.edit');
+Route::post('comment/{comment}','CommentController@update')->name('comments.update');
+Route::delete('comment/{comment}/','CommentController@destroy')->name('comments.destroy');
 
 #Home
 Route::get('/home', 'HomeController@index')->name('home');
-Auth::routes();
 

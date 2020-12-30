@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    Users List
+    Users
 @endsection
 
 @section('content')
@@ -29,9 +29,9 @@
                                 <td>{{$user-> email}}</td>
                                 <td>{{implode(',',$user-> roles()->get()->pluck('name')->toArray())}}</td>
                                 <td>        
-                                    <a href="{{route('users.show',$user)}}"> <button type="button" class="btn btn-primary float-left">View</button></a>
+                                    <a href="{{route('admin.users.show',$user)}}"> <button type="button" class="btn btn-primary float-left">View</button></a>
                                     @can('edit-users')
-                                        <a href="{{route('users.edit',$user)}}"><button type="button" class="btn btn-warning ">Edit</button></a>
+                                        <a href="{{route('admin.users.edit',$user)}}"><button type="button" class="btn btn-warning ">Edit</button></a>
                                     @endcan
                                     @can('delete-users')
                                     <form action="{{route('admin.users.destroy',$user)}}" method="POST">

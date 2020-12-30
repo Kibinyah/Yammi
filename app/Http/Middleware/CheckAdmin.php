@@ -3,8 +3,9 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Auth;
 
-class Manager
+class CheckAdmin
 {
     /**
      * Handle an incoming request.
@@ -15,6 +16,10 @@ class Manager
      */
     public function handle($request, Closure $next)
     {
+        $userRoles = Auth::user()->roles->pluck('name');
+        if(!$collection->contains('admin')){
+            return redirect('/home');
+        }
         return $next($request);
     }
 }

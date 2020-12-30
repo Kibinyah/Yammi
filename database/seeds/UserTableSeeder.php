@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use App\User;
+use App\Role;
 
 class UserTableSeeder extends Seeder
 {
@@ -14,14 +16,27 @@ class UserTableSeeder extends Seeder
     {
         //Dummy seed
         /*$u1 = new User;
-        $u1 -> username = "kevp99";
-        $u1 -> password = "1234567890";
-        $u1 -> realName = "Kevin Pan";
-        $u1 -> dateOfBirth = "1999-02-02";
-        $u1 -> bio = "Hi everybody";
-        $u1 -> numberOfPosts = 5;
-        $u1 -> save();*/
+        $u1 -> username = "kibinyah";
+        $u1 -> password = "12345678";
+        $u1 -> email = "kevinwingchunpan@gmail.com";
+        $u1 -> save();
+*/
 
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DB::table('users')->truncate();
+        DB::table('role_user')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+        $adminRole = Role::where('name','admin')->first();
+        $userRole = Role::where('name','user')->first();
+
+        $admin = User::create([
+            'username' => "admin user",
+            'email' => "admin@admin.com",
+            'password' => Hash::make('12345678'),
+        ]);
+
+        $admin->roles()->attach($adminRole);
         //Generates 10 users using the user factory
         factory(App\User::class,10)->create();
     }

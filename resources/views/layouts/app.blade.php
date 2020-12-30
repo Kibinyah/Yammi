@@ -52,13 +52,17 @@
                                     @if (auth()->user()->profile_image)
                                         <img style="width: 40px; height: 40px; border-radius: 50%;" src="/storage/profile_images/{{auth()->user()->profile_image}}">
                                     @else 
-                                        {{ auth()->user()->name }} 
+                                        {{ auth()->user()->username }} 
                                     @endif
                                     <span class="caret"></span>
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href = "/users/{{Auth::id()}}">Profile</a>
+                                    <a class="dropdown-item" href = "{{route('users.index')}}">User List</a>
+                                    @can('manage-users')
+                                        <a class="dropdown-item" href = "{{route('admin.users.index')}}">User Management</a>
+                                    @endcan
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

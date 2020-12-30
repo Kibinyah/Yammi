@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\User;
 use App\Profile;
+use App\Role;
+use Gate;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
-use Auth;
-
-class UserController extends Controller
+class UsersController extends Controller
 {
     public function __construct(){
         $this->middleware('auth');
@@ -23,39 +23,19 @@ class UserController extends Controller
     {
         //
         $users = User::all();
-        return view('users.index',['users' => $users]);
+        return view('admin.users.index')->with('users',$users);
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Show a user
      */
     public function show(User $user)
     {
         //$user = User::findOrFail($id);
+       /* if(Gate::denies('manage-users')){
+            return redirect()->back();
+        }*/
+
         if(($user->profile) == false){
             Profile::Create([
                 'name' => NULL,
@@ -65,30 +45,39 @@ class UserController extends Controller
             ]);
         }
         
-        return view('users.show',['user' => $user]);
+        return view('admin.users.show',['user' => $user]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
     public function edit(User $user)
     {
         //
-        return view('users.edit',['user' => $user]);
+
+        if(Gate::denies('edit-users')){
+            return redirect(route('admin.users.index'));
+        }
+        $roles = Role::all();
+        return view('admin.users.edit')->with([
+            'user'=>$user,
+            'roles'=> $roles
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
+        //
         $request->validate([
             'email' => 'string|required',
             'name' => 'string|nullable',
@@ -111,7 +100,6 @@ class UserController extends Controller
             $fileNameToStore = "noimage.png";
         }
 
-        $user = User::findOrFail($id);
         $user->email = $request->input('email');
         $user->profile_image = $fileNameToStore;
         $user->save();
@@ -122,22 +110,32 @@ class UserController extends Controller
             $profile = new Profile();
             $profile->user_id = $id;
         }
+
         $profile->name = $request->input('name');
         $profile->dateOfBirth = $request->input('dateOfBirth');
         $profile->bio = $request->input('bio');
         $profile->save();
 
-        return redirect()->route('users.show',$user)->with(['success' => 'Profile successfully updated']);
+        $user->roles()->sync($request->roles);
+
+        return redirect()->route('admin.users.show',$user)->with(['success' => 'User successfully updated']);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
     public function destroy(User $user)
     {
         //
+        if(Gate::denies('delete-users')){
+            return redirect(route('admin.users.index'));
+        }
+
+        $user->roles()->detach();
+        $user->delete();
+        return redirect()->route('admin.users.index')->with(['success' => 'User successfully deleted']);
     }
 }

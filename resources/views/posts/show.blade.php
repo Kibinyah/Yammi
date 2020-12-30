@@ -40,14 +40,13 @@
                         </td>
                     </tbody>
                     <ul>
-                        <a href="/posts/{{$post->id}}/edit" >Edit</a>
-
-                        <form method="POST"  action="{{ route('posts.destroy', ['post' => $post->id] ) }}">
+                        <a href="{{route('posts.edit',$post)}}"><button type="button" class="btn btn-warning ">Edit</button></a>
+                        <form method="POST"  action="{{ route('posts.destroy', $post) }}">
                             @csrf
                             @method('DELETE')
-                            <button type="submit">Delete</button>
+                            <button type="submit" class="btn btn-danger">Delete</button>
                         </form>
-                        <p><a href="{{ route('posts.index')}}">Back</a></p>
+                        <a href="{{ route('posts.index')}} "><button type="button" class="btn">Back</button></a>
                     </ul>
                     <ul>
                 </div>
@@ -61,6 +60,14 @@
                             <div class="comment">
                                 <p><strong>Name:</strong> {{$comment->user->username}}</p>
                                 <p><strong>Comment:</strong><br/>{{$comment->comment}}</p>
+
+                                <a href="{{route('comments.edit',$comment)}}"><button type="button" class="btn btn-warning ">Edit</button></a>
+                                <form method="POST"  action="{{ route('comments.destroy', ['comment' => $comment->id] ) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit">Delete</button>
+                                </form>
+                    
                             </div>
                         @endforeach
                     </tr>
