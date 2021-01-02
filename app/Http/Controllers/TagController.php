@@ -22,6 +22,9 @@ class TagController extends Controller
     public function index()
     {
         //
+        if(Gate::denies('isAdmin')){
+            return redirect()->back();
+        }
         $tag = Tag::all();
         return view('tags.index',['tags' => $tag]);
     }
@@ -65,6 +68,9 @@ class TagController extends Controller
     public function show(Tag $tag)
     {
         //
+        if(Gate::denies('isAdmin')){
+           return redirect()->back();
+        }
         return view('tags.show',['tag'=>$tag]);
     }
 
@@ -77,6 +83,9 @@ class TagController extends Controller
     public function edit($id)
     {
         //
+        if(Gate::denies('isAdmin')){
+            return redirect()->back();
+        }
         $tag = Tag::find($id);
         return view('tags.edit',['tag' => $tag]);
     }

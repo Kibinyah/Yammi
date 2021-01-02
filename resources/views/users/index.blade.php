@@ -16,7 +16,6 @@
                         <th scope="col">ID</th>
                         <th scope="col">Username</th>
                         <th scope="col">Email</th>
-                        <th scope="col">Roles</th>
                         <th scope="col">Actions</th>
                     </tr>
                     </thead>
@@ -27,7 +26,6 @@
                                 <th scope="row">{{$user->id}}</th>
                                 <td>{{$user->username}}</td>
                                 <td>{{$user-> email}}</td>
-                                <td>{{implode(',',$user-> roles()->get()->pluck('name')->toArray())}}</td>
                                 <td>        
                                     <a href="{{route('users.show',$user)}}"> <button type="button" class="btn btn-primary float-left">View</button></a>
                                     @can('edit-users')

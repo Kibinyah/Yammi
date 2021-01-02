@@ -41,23 +41,8 @@ class AuthServiceProvider extends ServiceProvider
             return $user->hasRole('admin');
         });
 
-        Gate::define('delete-posts',function($user){
-            return $user->hasRole('admin');
-        });
-        //
-        Gate::define('delete-comments',function($user){
-            return $user->hasRole('admin');
-        });
-
-        Gate::define('create-tags',function($user){
-            return $user->hasRole('admin');
-        });
-
-        Gate::define('edit-tags',function($user){
-            return $user->hasRole('admin');
-        });
-
-        Gate::define('delete-tags',function($user){
+        
+        Gate::define('isAdmin',function($user){
             return $user->hasRole('admin');
         });
     }

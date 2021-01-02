@@ -59,9 +59,9 @@
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href = "/users/{{Auth::id()}}">Profile</a>
-                                    <a class="dropdown-item" href = "{{route('users.index')}}">User List</a>
-                                    @can('manage-users')
-                                        <a class="dropdown-item" href = "{{route('admin.users.index')}}">User Management</a>
+                                    <a class="dropdown-item" href = "{{route('admin.users.index')}}">User List</a>
+                                    @can('isAdmin')
+                                        <a class="dropdown-item" href = "{{route('tags.index')}}">Tag List</a>
                                     @endcan
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();

@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use App\Comment;
+use App\Stats;
 use App\Tag;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Auth;
+use Gate;
 
 class PostController extends Controller
 {
@@ -85,6 +87,13 @@ class PostController extends Controller
 
         $p->tags()->sync($request->tags, false); 
 
+        $stats = new Stats;
+        $stats->views = 0;
+        $stats->likes = 0;
+        $stats->statable_id = $p->id;
+        $stats->statable_type = "Post";
+        $stats->save();
+
         session()->flash('message','Post is created.');
         return redirect()->route('posts.index');
 
@@ -111,6 +120,13 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         //
+        if(Gate::denies('isAdmin')){
+            if(auth()->user()->id !== $post->user_id){
+                return redirect('/posts')->with('error','Unauthorised Page');
+            }
+        }
+
+
         $tags = Tag::all();
         $tags2 = array();
         foreach($tags as $tag){
@@ -177,8 +193,10 @@ class PostController extends Controller
         //$post = Post::findOrFail($id);
 
         //Check correct user
-        if(auth()->user()->id !== $post->user_id){
-            return redirect('/posts')->with('error','Unauthorised Page');
+        if(Gate::denies('isAdmin')){
+            if(auth()->user()->id !== $post->user_id){
+                return redirect('/posts')->with('error','Unauthorised Page');
+            }
         }
 
 

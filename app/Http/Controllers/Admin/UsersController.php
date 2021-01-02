@@ -32,9 +32,9 @@ class UsersController extends Controller
     public function show(User $user)
     {
         //$user = User::findOrFail($id);
-       /* if(Gate::denies('manage-users')){
+        if(Gate::denies('manage-users')){
             return redirect()->back();
-        }*/
+        }
 
         if(($user->profile) == false){
             Profile::Create([

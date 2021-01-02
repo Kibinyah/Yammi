@@ -24,13 +24,7 @@ class Post extends Model
         return $this->belongsToMany('App\Tag');
     }
 
-    public function visits()
-    {
-        return $this->hasMany('App\Visit');
-    }
-
-    public function latest_visit()
-    {
-        return $this->hasOne('App\Visit')->latest();
+    public function stats(){
+        return $this->morphOne('App\Stat','statable');
     }
 }

@@ -55,7 +55,7 @@ Route::delete('tags/{tag}','TagController@destroy')->name('tags.destroy');
 #Comments
 Route::post('comment/{post}','CommentController@store')->name('comments.store');
 Route::get('comment/{comment}/edit','CommentController@edit')->name('comments.edit');
-Route::post('comment/{comment}','CommentController@update')->name('comments.update');
+Route::post('posts/comment/{comment}','CommentController@update')->name('comments.update');
 Route::delete('comment/{comment}/','CommentController@destroy')->name('comments.destroy');
 
 #Home

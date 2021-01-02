@@ -19,24 +19,10 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-12">
-                                    @if ($errors->any())
-                                        <div class="alert alert-danger alert-dismissible" role="alert">
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">×</span>
-                                            </button>
-                                            <ul>
-                                                @foreach ($errors->all() as $error)
-                                                    <li>
-                                                        {{ $error }}
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                    @endif
-                                    <form action="{{ route('comments.update',$comment) }}" method="POST" role="form">
+                                    <form method="POST" action="{{ route('comments.update', $comment) }}">
                                         @csrf
                                         <div class="form-group row">
-                                            <label for="comment" class="col-md-4 col-form-label text-md-right">Comment:</label>
+                                            <label class="col-md-4 col-form-label text-md-right">Comment:</label>
                                             <div class="col-md-6">
                                                 <input id="comment" type="text" class="form-control" name="comment" 
                                                 value="{{ old('comment', $comment->comment) }}"
@@ -45,7 +31,7 @@
                                         </div>
                                         <div class="form-group row mb-0 mt-5">
                                             <div class="col-md-8 offset-md-4">
-                                                <button type="submit" class="btn btn-primary">Update Profile</button>
+                                                <button type="submit" class="btn btn-primary {{ session('success') ? 'is-valid': ''}} ">Save</button>
                                             </div>
                                         </div>
                                     </form>

@@ -92,8 +92,7 @@
                                         </div>
                                         <div class="form-group row mb-0 mt-5">
                                             <div class="col-md-8 offset-md-4">
-
-                                                <button type="submit" class="btn"><a href="/users/{{$user->id}}/edit">Edit Profile</a></button>
+                                                <a href="/users/{{$user->id}}/edit" class="btn btn-primary">Edit Profile</a>
                                             </div>
                                         </div>
 

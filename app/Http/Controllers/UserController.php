@@ -6,7 +6,7 @@ use App\User;
 use App\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-
+use Session;
 use Auth;
 
 class UserController extends Controller
@@ -77,6 +77,9 @@ class UserController extends Controller
     public function edit(User $user)
     {
         //
+        if(auth()->user() != $user){
+            return redirect()->back();
+        }
         return view('users.edit',['user' => $user]);
     }
 
@@ -112,6 +115,7 @@ class UserController extends Controller
         }
 
         $user = User::findOrFail($id);
+        $user->email = NULL;
         $user->email = $request->input('email');
         $user->profile_image = $fileNameToStore;
         $user->save();
