@@ -11,4 +11,6 @@ class Stats extends Model
     {
         return $this->morphTo();
     }
+
+    
 }

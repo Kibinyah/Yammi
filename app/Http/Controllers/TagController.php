@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Session;
 use App\Tag;
 use App\Post;
+use Gate;
 
 class TagController extends Controller
 {

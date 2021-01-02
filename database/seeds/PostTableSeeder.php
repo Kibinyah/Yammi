@@ -14,6 +14,6 @@ class PostTableSeeder extends Seeder
     {
         //Dummy Seed
         //Generates 20 Posts using Post factory
-        factory(App\Post::class,20)->create();
+        factory(App\Post::class,10)->create();
     }
 }

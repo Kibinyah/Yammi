@@ -56,7 +56,7 @@ class CommentController extends Controller
         $stats->views = 0;
         $stats->likes = 0;
         $stats->statable_id = $comment->id;
-        $stats->statable_type = "Comment";
+        $stats->statable_type = "App\Comment";
         $stats->save();
 
         return back()
@@ -136,5 +136,14 @@ class CommentController extends Controller
         $post = $comment->post;
         $comment -> delete();
         return redirect()->route('posts.show',['post' => $post]);
+    }
+
+    public function addLike(Request $request, Comment $comment){
+        $loggedin_user = Auth::user()->id;
+        $comment->stats->likes += 1;
+        $comment->post->stats->views -= 1;
+        $comment->stats->save();
+
+        return redirect()->back();
     }
 }

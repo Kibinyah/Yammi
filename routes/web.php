@@ -59,5 +59,8 @@ Route::post('posts/comment/{comment}','CommentController@update')->name('comment
 Route::delete('comment/{comment}/','CommentController@destroy')->name('comments.destroy');
 
 #Home
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'PostController@index')->name('home');
 
+
+Route::post('posts/stat/{post}','PostController@addLike')->name('posts.like');
+Route::post('comment/stat/{comment}','CommentController@addLike')->name('comments.like');

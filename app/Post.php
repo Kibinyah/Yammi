@@ -25,6 +25,6 @@ class Post extends Model
     }
 
     public function stats(){
-        return $this->morphOne('App\Stat','statable');
+        return $this->morphOne('App\Stats','statable');
     }
 }

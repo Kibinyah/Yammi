@@ -8,6 +8,7 @@ use App\Profile;
 use App\Role;
 use Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
 {
@@ -22,8 +23,8 @@ class UsersController extends Controller
     public function index()
     {
         //
-        $users = User::all();
-        return view('admin.users.index')->with('users',$users);
+        $users = User::paginate(7);
+        return view('admin.users.index',['users'=>$users]);
     }
 
     /**

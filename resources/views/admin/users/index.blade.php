@@ -43,6 +43,7 @@
                                 </td>
                             </tr>
                         @endforeach
+                        {{$users->links()}}
                     @else 
                         <p>No users found</p>
                     @endif

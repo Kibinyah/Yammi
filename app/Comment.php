@@ -18,4 +18,7 @@ class Comment extends Model
     {
         return $this->belongsTo('App\User');
     }
+    public function stats(){
+        return $this->morphOne('App\Stats','statable');
+    }
 }   

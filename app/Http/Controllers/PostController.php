@@ -8,6 +8,7 @@ use App\Stats;
 use App\Tag;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Auth;
 use Gate;
 
@@ -15,6 +16,10 @@ class PostController extends Controller
 {
     public function __construct(){
         $this->middleware('auth');
+    }
+
+    public function list(){
+    
     }
     /**
      * Display a listing of the resource.
@@ -29,8 +34,9 @@ class PostController extends Controller
             ->with('latest_visit')
             ->get()
         */
-        $posts = Post::all();
-            
+        #$posts = DB::table('posts')->paginate(5);
+        $posts = Post::paginate(5);
+
         return view('posts.index',['posts' => $posts]);
     }
 
@@ -91,9 +97,9 @@ class PostController extends Controller
         $stats->views = 0;
         $stats->likes = 0;
         $stats->statable_id = $p->id;
-        $stats->statable_type = "Post";
+        $stats->statable_type = "App\Post";
         $stats->save();
-
+        
         session()->flash('message','Post is created.');
         return redirect()->route('posts.index');
 
@@ -107,6 +113,11 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        if($post->stats == TRUE){
+            $post->stats->views += 1;
+            $post->stats->save();
+        }
+       
         //$post = Post::findOrFail($id);
         return view('posts.show',['post' => $post]);
     }
@@ -214,19 +225,14 @@ class PostController extends Controller
     /**
      * 
      */
-    public function comment(Request $request,  $post)
-    {
-        $validateData = $request->validate([
-            'comment' => 'required|string',
-        ]);
-        $comment = new comment;
-        $comment->user_id = Auth::id();
-        $comment->post_id = $post;
-        $comment->comment = $validateData['comment'];
-        $comment->save();
 
-        return redirect('/post/{$post}')
-            ->with('response','Comment Added Successfully');
-            
+
+    public function addLike(Request $request, Post $post){
+        $loggedin_user = Auth::user()->id;
+        $post->stats->likes += 1;
+        $post->stats->views -= 1;
+        $post->stats->save();
+
+        return redirect()->back();
     }
 }

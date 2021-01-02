@@ -6,6 +6,7 @@ use App\User;
 use App\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use Session;
 use Auth;
 
@@ -22,7 +23,7 @@ class UserController extends Controller
     public function index()
     {
         //
-        $users = User::all();
+        $users = User::paginate(10);
         return view('users.index',['users' => $users]);
     }
 

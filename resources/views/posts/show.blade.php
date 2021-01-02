@@ -21,15 +21,32 @@
                     <tbody>
                         <td>
                             <h2>Title: {{$post->title}}</h2>
-                            <div class="col-md-4 col-sm-4">
-                                <img style="width:100%" src="/storage/cover_images/{{$post->cover_image}}">
-                            </div>
+                            @if($post->cover_image !== NULL)
+                                <div class="col-md-4 col-sm-4">
+                                    <img style="width:100%" src="/storage/cover_images/{{$post->cover_image}}">
+                                </div>
+                            @endif
                             <div class="col-md-8 col-sm-8">
-                                <h3>Content: </h3>
                                 <ul>{{$post->content}}</ul>
                                 <small>Written on {{$post->created_at}} by {{$post->user->username}}</small>
                             </div>
-                            <hr>
+                            <div class="col-md-8 col-sm-8">
+                                <div class="interaction">
+                                <form method="POST" action="{{route('posts.like',$post)}}">
+                                {{csrf_field()}}
+                                    <div class="form-group">
+                                    <button type="submit" class="btn btn-success btn-lg btn-block">Like</button>
+                                    </div>
+                                </form>
+                                </div>  
+                            </div>
+                            @if(($post->stats) == TRUE)
+                            <div class="col-md-4 col-sm-8">
+                                <ul>Likes: {{$post->stats->likes}}</ul>
+                                <small>Views: {{$post->stats->views}}</small>
+                            </div>
+                            @endif
+                            
                                 <div class="col-md-4 col-sm-4">
                                     <h4>Tags: </h4>
                                     @foreach ($post->tags as $tags)
@@ -61,13 +78,24 @@
                                 <p><strong>Name:</strong> {{$comment->user->username}}</p>
                                 <p><strong>Comment:</strong><br/>{{$comment->comment}}</p>
 
-                                <a href="{{route('comments.edit',$comment)}}"><button type="button" class="btn btn-warning ">Edit</button></a>
-                                <form method="POST"  action="{{ route('comments.destroy', ['comment' => $comment->id] ) }}">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit">Delete</button>
-                                </form>
-                    
+                                <form method="POST" action="{{route('comments.like',$comment)}}">
+                                    {{csrf_field()}}
+                                        <div class="form-group">
+                                        <button type="submit" class="btn btn-success">Like</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                @if(($comment->stats) == TRUE)
+                                    <ul>Likes: {{$comment->stats->likes}}</ul>
+                                @endif
+                                @if((Auth::user() == $comment->user) || 'isAdmin' == TRUE)
+                                    <a href="{{route('comments.edit',$comment)}}"><button type="button" class="btn btn-warning ">Edit</button></a>
+                                    <form method="POST"  action="{{ route('comments.destroy', ['comment' => $comment->id] ) }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit">Delete</button>
+                                    </form>
+                                @endif
                             </div>
                         @endforeach
                     </tr>
