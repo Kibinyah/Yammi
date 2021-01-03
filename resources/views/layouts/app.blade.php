@@ -11,7 +11,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-
+    
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -21,6 +21,33 @@
 </head>
 
 <style>
+body{
+    font: 15px/1.5 Arial, Helvetica, san-serif;
+    padding:0;
+    margin:0;
+    background-color:#f4f4f4;
+}
+
+.container{
+    width:80%;
+    margin:auto;
+    padding:auto;
+}
+
+.items{
+    margin:10px 0px 20px 100px;
+    padding:auto;
+}
+
+.vspacing{
+    margin: 10px 0 10px 0;
+}
+
+.xspacing{
+    margin: 0 20px 0 90px;
+    padding:auto;
+}
+
 .page-item{
     display:''display: inline-block;
     padding: 10px;
@@ -29,10 +56,10 @@
 
 
 <body>
-    <div id="app">
+    <div id="header">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                <a href="/home">{{ __('Yammi') }}</a>
+                <a href="/home" >{{ __('Yammi') }}</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>

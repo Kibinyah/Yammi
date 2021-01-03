@@ -8,7 +8,6 @@ use App\Stats;
 use App\Tag;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Auth;
 use Gate;
 
@@ -18,9 +17,7 @@ class PostController extends Controller
         $this->middleware('auth');
     }
 
-    public function list(){
-    
-    }
+
     /**
      * Display a listing of the resource.
      *
@@ -35,7 +32,7 @@ class PostController extends Controller
             ->get()
         */
         #$posts = DB::table('posts')->paginate(5);
-        $posts = Post::paginate(5);
+        $posts = Post::orderBy('created_at', 'desc')->paginate(10);
 
         return view('posts.index',['posts' => $posts]);
     }
@@ -80,7 +77,7 @@ class PostController extends Controller
             //Upload Image
             $path = $request->file('cover_image')->storeAs('public/cover_images',$fileNameToStore);
         }else{
-            $fileNameToStore = 'noimage.png';
+            $fileNameToStore = NULL;
         }
 
 
@@ -137,7 +134,6 @@ class PostController extends Controller
             }
         }
 
-
         $tags = Tag::all();
         $tags2 = array();
         foreach($tags as $tag){
@@ -153,12 +149,12 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, $post)
     {
         //
         $request->validate([
             'title' => 'required|string',
-            'content' => 'required|string'
+            'content' => 'required|string',
         ]);
 
         //Handle file upload
@@ -174,26 +170,23 @@ class PostController extends Controller
             //Upload Image
             $path = $request->file('cover_image')->storeAs('public/cover_images',$fileNameToStore);
         }
-        /*$post->update($request->only([
-               'title',
-               'content',
-        ]));
-        */
+
+        $post = Post::findOrFail($post);
         $post->title = $request->input('title');
         $post->content = $request->input('content');
         if($request->hasFile('cover_image')){
             $post->cover_image = $fileNameToStore;
-        }
+        } 
         $post->save();
 
         $post->tags()->sync($request->tags); 
 
         session()->flash('message','Post is updated.');
-        return redirect()->route('posts.index');
+        return redirect()->route('posts.show',['post' => $post]);
             #->with(['success' => 'All changes successfully saved']);
     }
 
-    /**
+    /*
      * Remove the specified resource from storage.
      *
      * @param  int  $id
@@ -227,12 +220,33 @@ class PostController extends Controller
      */
 
 
-    public function addLike(Request $request, Post $post){
+    public function addLike(Request $request, Post $post)
+    {
         $loggedin_user = Auth::user()->id;
         $post->stats->likes += 1;
         $post->stats->views -= 1;
         $post->stats->save();
 
         return redirect()->back();
+    }
+
+    public function saveComment(Request $request)
+    {
+        $comment = new Comment();
+        $comment->user_id = Auth::id();
+        $comment->post_id = $request->post;
+        $comment->comment = $request->comment;
+        #$comment->post()->associate(post);
+        $comment->save();
+
+        $stats = new Stats;
+        $stats->views = 0;
+        $stats->likes = 0;
+        $stats->statable_id = $comment->id;
+        $stats->statable_type = "App\Comment";
+        $stats->save();
+
+        return response()->json(['bool'=>true]);
+
     }
 }

@@ -8,6 +8,12 @@ class Post extends Model
 {
     //
     protected $guarded = [];
+
+    protected $fillable = [
+        "title",
+        "content",
+        "cover_image",
+    ];
     
     public function user()
     {

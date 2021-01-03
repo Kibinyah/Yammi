@@ -17,10 +17,11 @@ class CommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Post $post)
     {
-        //
+        return response()->json($post->comments()->with('user')->latest()->get());
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -38,12 +39,11 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request,$post_id)
+    public function store(Request $request,Post $post)
     {
         $validateData = $request->validate([
             'comment' => 'required|string',
         ]);
-        $post = Post::find($post_id);
 
         $comment = new Comment;
         $comment->user_id = Auth::id();
@@ -51,6 +51,8 @@ class CommentController extends Controller
         $comment->comment = $validateData['comment'];
         $comment->post()->associate($post);
         $comment->save();
+        
+        $comment = Comment::where('id', $comment->id)->with('user')->first();
 
         $stats = new Stats;
         $stats->views = 0;
@@ -59,8 +61,9 @@ class CommentController extends Controller
         $stats->statable_type = "App\Comment";
         $stats->save();
 
-        return back()
-            ->with('response','Comment Added Successfully');
+        return $comment->toJson();
+        /*return back()
+            ->with('response','Comment Added Successfully');*/
     }
 
     /**
@@ -138,7 +141,8 @@ class CommentController extends Controller
         return redirect()->route('posts.show',['post' => $post]);
     }
 
-    public function addLike(Request $request, Comment $comment){
+    public function addLike(Request $request, Comment $comment)
+    {
         $loggedin_user = Auth::user()->id;
         $comment->stats->likes += 1;
         $comment->post->stats->views -= 1;

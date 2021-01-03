@@ -111,14 +111,14 @@ class UserController extends Controller
             $fileNameToStore = $filename.'_'.time().'.'.$extension;
             //Upload Image
             $path = $request->file('profile_image')->storeAs('public/profile_images',$fileNameToStore);
-        }else{
-            $fileNameToStore = "noimage.png";
         }
 
         $user = User::findOrFail($id);
         $user->email = NULL;
         $user->email = $request->input('email');
-        $user->profile_image = $fileNameToStore;
+        if($request->hasFile('profile_image')){
+            $user->profile_image = $fileNameToStore;
+        }
         $user->save();
 
         if(($user->profile) == true){

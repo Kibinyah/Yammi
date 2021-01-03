@@ -39,10 +39,8 @@ Route::get('posts/create','PostController@create')->name('posts.create');
 
 Route::post('posts','PostController@store')->name('posts.store');
 Route::get('posts/{post}','PostController@show')-> name('posts.show');
-
 Route::get('posts/{post}/edit','PostController@edit')->name('posts.edit');
 Route::post('posts/{post}','PostController@update')->name('posts.update');
-
 Route::delete('posts/{post}','PostController@destroy')->name('posts.destroy');
 
 #Tags
@@ -64,3 +62,6 @@ Route::get('/home', 'PostController@index')->name('home');
 
 Route::post('posts/stat/{post}','PostController@addLike')->name('posts.like');
 Route::post('comment/stat/{comment}','CommentController@addLike')->name('comments.like');
+
+Route::post('save-comment','PostController@saveComment')->name('comments.add');
+Route::get('/posts/{post}/comments', 'CommentController@index');

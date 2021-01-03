@@ -3,34 +3,36 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="card">
-                <a href="{{ route('posts.create') }}">Create Post</a>
-                <div class="card-header">{{ __('Dashboard') }}</div>
-                
-                @if(count($posts) > 0)
-                    @foreach($posts as $post)
-                        <div class="well">
-                            <div class="row">
-                                <div class="col-md-4 col-sm-4">
-                                    <img style="width:100%" src="/storage/cover_images/{{$post->cover_image}}">
-                                </div>
-                                <div class="col-md-8 col-sm-8">
-                                    <h3><a href="/posts/{{$post->id}}">{{$post -> title}}</a></h3>                                        
-                                    @if($post->stats)
-                                        <h6>Likes: {{$post->stats->likes}}</h6>
-                                        <h6>Views: {{$post->stats->views}}</h6>
-                                    @endif
-                                      <small>Written on {{$post->created_at}} by {{$post->user->username}}</small>
-                                </div>
-                           </div>
-                        </div>
-                      @endforeach
-                      {{$posts->links()}}
-                @else 
-                    <p>No posts found</p>
-                @endif
-            </div>
+                <div class="card-header">
+                    Home 
+                    <a href="{{ route('posts.create') }}"> <button type="button" class="btn btn-primary btn-sm button1 float-right">Create Post</button></a>
+                </div>
+                <table class="table table-striped ">
+                    <tbody class="items">
+                    @if(count($posts) > 0)
+                        @foreach($posts as $post)
+                        <tr>
+                            <h3><a href="/posts/{{$post->id}}">{{$post -> title}}</a></h3> 
+                            @if(($post->cover_image) != NULL)
+                                <img style="width:100%" src="/storage/cover_images/{{$post->cover_image}}">
+                            @endif
+                            <p>{{$post -> content}}</p>
+                            @if($post->stats)
+                                <h6>Likes: {{$post->stats->likes}}</h6>
+                                <h6>Views: {{$post->stats->views}}</h6>
+                            @endif
+                            <small>Written on {{$post->created_at}} by {{$post->user->username}}</small>
+                            <hr>
+                        </tr>
+                        @endforeach
+                        {{$posts->links()}}
+                    @else 
+                        <p>No posts found</p>
+                    @endif
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
