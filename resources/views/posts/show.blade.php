@@ -2,71 +2,40 @@
 
 @section('title')
     Post Details
+
+    <link rel="stylesheet" href="{{ mix('css/app.css') }}" />
+    <script defer src="{{ mix('js/app.js') }}"></script>
 @endsection
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css" />
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" />
-
-
-@section('scripts')
-  <script>
-      const app = new Vue({
-          el: '#app',
-          data: {
-              comments: {},
-              commentBox: '',
-              post: {!! $post->toJson() !!},
-              user: {!! Auth::check() ? Auth::user()->toJson() : 'null' !!}
-          },
-          mounted() {
-              this.getComments();
-          },
-          methods: {
-              getComments() 
-                  axios.get('/api/posts/'+this.post.id+'/comments')
-                       .then((response) => {
-                           this.comments = response.data
-                       })
-                       .catch(function (error) {
-                           console.log(error);
-                       }
-                  );
-              },
-              postComment() {
-                  axios.post('/api/posts/'+this.post.id+'/comments', {
-                      api_token: this.user.api_token,
-                      body: this.commentBox
-                  })
-                  .then((response) => {
-                      this.comments.unshift(response.data);
-                      this.commentBox = '';
-                  })
-                  .catch((error) => {
-                      console.log(error);
-                  })
-              }
-          }
-      })
-  </script>
-@endsection
 
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <a href="{{ route('posts.index')}} "><button type="button" class="btn btn-default">Go Back</button></a>
             <div class="card">
-                <div class="card-header">{{ __('Post') }}</div>
+                <div class="card-header">
+                    <a href="{{ route('posts.index')}} "><button type="button" class="btn btn-default">Go Back</button></a>
+                </div>
                 <div class="card-body">
+                    <div class="float-right">
+                            @if($post->user->profile_image)
+                                <img style="width: 75px; height: 75px; border-radius: 50%;" class="float-right" src="/storage/profile_images/{{$post->user->profile_image}}">
+                            @endif 
+                    </div>
                     <h1>{{$post->title}}</h1>
+                    <div class="row">
+                        <small>Written on: {{$post->created_at}}</small>
+                        <br>
+                        <small style="padding-left:20px">By: {{$post->user->username}}</small>
+                    </div>
                     @if($post->cover_image != NULL)
                         
-                        <img style="width:100%" src="/storage/cover_images/{{$post->cover_image}}">
+                        <img style="width:100%; max-width:700px;" src="/storage/cover_images/{{$post->cover_image}}">
                     
                     @endif
                     <p>{{$post->content}}</p>
                     <hr>
-                    @if((Auth::user() == $post->user) || 'isAdmin' == TRUE)
+                    @if((auth()->user() == $post->user)  || (auth()->user()->hasRole("admin")))
                         <a href="{{route('posts.edit',$post)}}"><button type="button" class="btn btn-warning float-left">Edit Post</button></a>
                         <form method="POST"  action="{{ route('posts.destroy', $post) }}">
                             @csrf
@@ -75,10 +44,7 @@
                         </form>
                         <hr>
                     @endif
-                    <div class="float-right">
-                        <small>Written on: {{$post->created_at}}</small>
-                        <ul><small>By: {{$post->user->username}}</small></ul>
-                    </div>
+    
                     @if(($post->stats) == TRUE)
                         <div>
                             <form method="POST" class="float-left" action="{{route('posts.like',$post)}}">
@@ -108,14 +74,17 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                <h3> Comments: </h3>
+                <h3> Comments: <span class="comment-count float-right badge badge-info">{{ count($post->comments) }}</span> </h3>
                     <hr>
                     <div class="col-md-12">
                         @foreach($post->comments as $comment)
                             <div class="comment" id="commentTable">
+                                @if($comment->user->profile_image)
+                                    <img style="width: 75px; height: 75px; border-radius: 50%;" class="float-right" src="/storage/profile_images/{{$comment->user->profile_image}}">
+                                @endif 
                                 <p><strong>Username:</strong>{{$comment->user->username}}</p>
                                 <p><strong>Comment:</strong><br/>{{$comment->comment}}</p>
-                                @if((Auth::user() == $comment->user) || 'isAdmin' == TRUE)
+                                @if((auth()->user()->id == $comment->user_id) || (auth()->user()->hasRole("admin")))
                                     <a href="{{route('comments.edit',$comment)}}"><button type="button" class="btn btn-warning float-right">Edit</button></a>
                                     <form method="POST"  action="{{ route('comments.destroy', ['comment' => $comment->id] ) }}">
                                         @csrf
@@ -148,30 +117,6 @@
                 </form>
             </div>
         </div>
-        <h3>Comments:</h3>
-
-        <div style="margin-bottom:50px;" v-if="user">
-            <textarea class="form-control" rows="3" name="body" placeholder="Leave a comment" v-model="commentBox"></textarea>
-            <button @click.prevent="postComment">Save Comment</button>
-        </div>
-
-        <div class="media" style="margin-top:20px;" v-for="comment in comments">
-            <div class="media-left">
-                <a href="#">
-                    <img class="media-object" src="http://placeimg.com/80/80" alt="...">
-                </a>
-            </div>
-            <div class="media-body">
-                <h4 class="media-heading">@{{comment.user.username}} said...</h4>
-                <p>
-                @{{comment.comment}}
-                </p>
-                <span style="color: #aaa;">on</span>
-            </div>
-        </div>
     </div>
 </div>
-
-
-
 @endsection

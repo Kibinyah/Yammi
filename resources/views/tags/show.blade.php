@@ -6,8 +6,9 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
+            <a href="{{ route('tags.index')}} "><button type="button" class="btn btn-info">Go Back</button></a>
                 <div class="card">
-                    <div class="card-header">Profile</div>
+                    <div class="card-header">Tag</div>
                     <div class="card-body">
                         @if (session('status'))
                             <div class="alert alert-success" role="alert">

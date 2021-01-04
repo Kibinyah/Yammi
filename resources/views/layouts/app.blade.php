@@ -25,13 +25,20 @@ body{
     font: 15px/1.5 Arial, Helvetica, san-serif;
     padding:0;
     margin:0;
-    background-color:#f4f4f4;
+
+    background-color: lightblue;
 }
 
 .container{
     width:80%;
     margin:auto;
-    padding:auto;
+    padding: 2px 16px;
+}
+.navbar{
+    background-color: #FFF8DC;
+}
+.card{
+    background-color: LightCyan;
 }
 
 .items{
@@ -48,6 +55,7 @@ body{
     padding:auto;
 }
 
+
 .page-item{
     display:''display: inline-block;
     padding: 10px;
@@ -57,9 +65,9 @@ body{
 
 <body>
     <div id="header">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md shadow-sm">
             <div class="container">
-                <a href="/home" >{{ __('Yammi') }}</a>
+                <a href="/home" ><b>{{ __('Yammi') }}</b></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -95,8 +103,9 @@ body{
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href = "/users/{{Auth::id()}}">Profile</a>
-                                    <a class="dropdown-item" href = "{{route('admin.users.index')}}">User List</a>
+                                    <a class="dropdown-item" href = "{{route('users.index')}}">User List</a>
                                     @can('isAdmin')
+                                        <a class="dropdown-item" href = "{{route('admin.users.index')}}">User Management</a>
                                         <a class="dropdown-item" href = "{{route('tags.index')}}">Tag List</a>
                                     @endcan
                                     <a class="dropdown-item" href="{{ route('logout') }}"
@@ -116,7 +125,7 @@ body{
             </div>
         </nav>
 
-        <main class="py-4">
+        <main class="py-4" id="app">
             @yield('content')
         </main>
     </div>

@@ -7,7 +7,7 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="card">    
                 <div class="card-header">{{ __('User List') }}</div>
                 <table class="table">
@@ -28,18 +28,15 @@
                                 <td>{{$user->username}}</td>
                                 <td>{{$user-> email}}</td>
                                 <td>{{implode(',',$user-> roles()->get()->pluck('name')->toArray())}}</td>
-                                <td>        
+                                <td class="row">        
                                     <a href="{{route('admin.users.show',$user)}}"> <button type="button" class="btn btn-primary float-left">View</button></a>
-                                    @can('edit-users')
-                                        <a href="{{route('admin.users.edit',$user)}}"><button type="button" class="btn btn-warning ">Edit</button></a>
-                                    @endcan
-                                    @can('delete-users')
+
+                                    <a href="{{route('admin.users.edit',$user)}}"><button type="button" class="btn btn-warning ">Edit</button></a>
                                     <form action="{{route('admin.users.destroy',$user)}}" method="POST">
                                         @csrf
                                         {{method_field('DELETE')}}
-                                        <button type="submit" class="btn btn-danger ">Delete</button>
+                                        <button type="submit" class="btn btn-danger">Delete</button>
                                     </form>
-                                    @endcan
                                 </td>
                             </tr>
                         @endforeach

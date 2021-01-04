@@ -23,6 +23,9 @@ class UsersController extends Controller
     public function index()
     {
         //
+        if(Gate::denies('isAdmin')){
+            return redirect()->back();
+        }
         $users = User::paginate(7);
         return view('admin.users.index',['users'=>$users]);
     }
@@ -33,7 +36,7 @@ class UsersController extends Controller
     public function show(User $user)
     {
         //$user = User::findOrFail($id);
-        if(Gate::denies('manage-users')){
+        if(Gate::denies('isAdmin')){
             return redirect()->back();
         }
 
@@ -59,8 +62,8 @@ class UsersController extends Controller
     {
         //
 
-        if(Gate::denies('edit-users')){
-            return redirect(route('admin.users.index'));
+        if(Gate::denies('isAdmin')){
+            return redirect()->back();
         }
         $roles = Role::all();
         return view('admin.users.edit')->with([
@@ -131,8 +134,8 @@ class UsersController extends Controller
     public function destroy(User $user)
     {
         //
-        if(Gate::denies('delete-users')){
-            return redirect(route('admin.users.index'));
+        if(Gate::denies('isAdmin')){
+            return redirect()->back();
         }
 
         $user->roles()->detach();

@@ -33,7 +33,8 @@
                                 <label for="cover_image">Image:</label>
                                 <input id="cover_image" type="file" class="form-control vspacing" name="cover_image">
 
-                                <input type="submit" class="form-control items vspacing" button="btn btn-primary" value="Submit">
+                                
+                                <button type="submit" class="form-control items vspacing" button="btn btn-primary btn-sm button1 btn-log">Submit</button>
                                 <a href="{{ route('posts.index')}}">Cancel</a>
                             </div>
                         </div>

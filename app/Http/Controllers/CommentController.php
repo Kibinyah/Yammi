@@ -12,6 +12,39 @@ use Gate;
 
 class CommentController extends Controller
 {
+    public function apiIndex()
+    {
+        $post = substr(url()->previous(),26);
+        $comments = Comment::findOrFail($post);
+        return $comments;
+    }
+
+    public function apiStore(Request $request)
+    {
+        $validateData = $request->validate([
+            'comment' => 'required|string',
+        ]);
+
+        $post = substr(url()->previous(),24);
+        
+        $comment = new Comment;
+        $comment->user_id = Auth::id();
+        $comment->post_id = $post;
+        $comment->comment = $validateData['comment'];
+        $comment->post()->associate($post);
+        $comment->save();
+        
+        $comment = Comment::where('id', $comment->id)->with('user')->first();
+
+        $stats = new Stats;
+        $stats->views = 0;
+        $stats->likes = 0;
+        $stats->statable_id = $comment->id;
+        $stats->statable_type = "App\Comment";
+        $stats->save();
+        
+        return $comment;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -19,7 +52,7 @@ class CommentController extends Controller
      */
     public function index(Post $post)
     {
-        return response()->json($post->comments()->with('user')->latest()->get());
+        
     }
 
 
@@ -61,9 +94,9 @@ class CommentController extends Controller
         $stats->statable_type = "App\Comment";
         $stats->save();
 
-        return $comment->toJson();
-        /*return back()
-            ->with('response','Comment Added Successfully');*/
+        #return $comment->toJson();
+        return back()
+            ->with('response','Comment Added Successfully');
     }
 
     /**

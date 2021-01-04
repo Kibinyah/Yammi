@@ -32,7 +32,7 @@ class PostController extends Controller
             ->get()
         */
         #$posts = DB::table('posts')->paginate(5);
-        $posts = Post::orderBy('created_at', 'desc')->paginate(10);
+        $posts = Post::orderBy('created_at', 'desc')->paginate(3);
 
         return view('posts.index',['posts' => $posts]);
     }
@@ -230,7 +230,7 @@ class PostController extends Controller
         return redirect()->back();
     }
 
-    public function saveComment(Request $request)
+    public function save_comment(Request $request)
     {
         $comment = new Comment();
         $comment->user_id = Auth::id();
@@ -238,13 +238,6 @@ class PostController extends Controller
         $comment->comment = $request->comment;
         #$comment->post()->associate(post);
         $comment->save();
-
-        $stats = new Stats;
-        $stats->views = 0;
-        $stats->likes = 0;
-        $stats->statable_id = $comment->id;
-        $stats->statable_type = "App\Comment";
-        $stats->save();
 
         return response()->json(['bool'=>true]);
 

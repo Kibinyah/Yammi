@@ -4,12 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravelista\Comments\Commenter;
 use App\Role;
 use App\Post;
 use App\Comment;
 
 class User extends Authenticatable
 {
+
     protected $fillable = [
         "username",
         "email",

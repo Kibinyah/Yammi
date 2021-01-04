@@ -58,10 +58,10 @@ Route::delete('comment/{comment}/','CommentController@destroy')->name('comments.
 
 #Home
 Route::get('/home', 'PostController@index')->name('home');
-
-
 Route::post('posts/stat/{post}','PostController@addLike')->name('posts.like');
 Route::post('comment/stat/{comment}','CommentController@addLike')->name('comments.like');
 
-Route::post('save-comment','PostController@saveComment')->name('comments.add');
-Route::get('/posts/{post}/comments', 'CommentController@index');
+#Route::get('posts/comments','CommentController@apiIndex') ->name('api.comments.index');
+#Route::post('posts/comment','CommentController@apiStore')->name('api.comments.store');
+#Route::post('save-comment','PostController@save_comment');
+#Route::get('/posts/{post}/comments', 'CommentController@index');

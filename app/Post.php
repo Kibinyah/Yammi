@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Laravelista\Comments\Commenter;
 
 class Post extends Model
 {

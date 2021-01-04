@@ -14,12 +14,14 @@
                     @foreach($tags as $tag)
                         <div class="well">
                             <div class="row">
-                                <div class="col-md-8 col-sm-8">
+                                <div class="col-md-8 col-sm-8 xspacing">
                                     <a  href = "/tags/{{$tag->id}}">
                                         {{$tag -> name}}
-                                    </a>                           
+                                    </a>                         
                                 </div>
+                               
                             </div>
+                            <hr>  
                         </div>
                     @endforeach
                 @else 
